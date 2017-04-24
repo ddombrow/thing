@@ -17,9 +17,11 @@ defmodule Thing.Mixfile do
     # Specify extra applications you'll use from Erlang/Elixir
     [
       mod: { Thing, [] },
-      extra_applications: [
+      applications: [
         :cowboy, 
-        :ranch, 
+        :ranch
+      ],
+      extra_applications: [
         :logger
       ]
     ]
@@ -35,8 +37,9 @@ defmodule Thing.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{ :cowboy, github: "ninenines/cowboy", tag: "2.0.0-pre.8" },
-     {:jsex, "~> 2.0"}
+    [
+      { :cowboy, github: "ninenines/cowboy", tag: "2.0.0-pre.8" },
+      {:jsex, "~> 2.0"}
     ]
   end
 end

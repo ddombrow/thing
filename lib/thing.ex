@@ -29,7 +29,7 @@ defmodule Thing do
           #   :cowboy_elixir_example -- application name.  This is used to search for
           #                             the path that priv/ exists in.
           #   "index.html            -- filename to serve
-          {"/", :cowboy_static, {:priv_file, :cowboy_elixir_example, "index.html"}},
+          {"/", :cowboy_static, {:file, "../priv/index.html"}},
 
 
           # Serve all static files in a directory.
@@ -61,11 +61,10 @@ defmodule Thing do
     dispatch_config = build_dispatch_config()
     { :ok, _ } = :cowboy.start_tls(:api,
                                     100,
-                                   [
-                                     {:port, 8443},
-                                     {:cert, "c:\certs\dd-local.pem"}
-                                   ],
-                                   %{ :env => [{:dispatch, dispatch_config}]}
+                                   [port: 8443,
+                                    keyfile: "/home/crunch/server.key",
+                                    certfile: "/home/crunch/server.crt"],
+                                   %{ env: %{dispatch: dispatch_config}}
                                    )
   end
 end
