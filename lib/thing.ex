@@ -29,7 +29,8 @@ defmodule Thing do
           #   :cowboy_elixir_example -- application name.  This is used to search for
           #                             the path that priv/ exists in.
           #   "index.html            -- filename to serve
-          {"/", :cowboy_static, {:file, "../priv/index.html"}},
+          #{"/", :cowboy_static, {:file, "../priv/index.html"}},
+          {"/", Thing.HelloHandler, [] },
 
 
           # Serve all static files in a directory.
@@ -49,7 +50,7 @@ defmodule Thing do
           #{"/dynamic", DynamicPageHandler, []},
 
           # Serve websocket requests.
-          {"/websocket", WebsocketHandler, []}
+          #{"/websocket", WebsocketHandler, []}
       ]}
     ])
   end
@@ -59,11 +60,18 @@ defmodule Thing do
     # Supervisor.start_link [], strategy: :one_for_one
 
     dispatch_config = build_dispatch_config()
+    #{ :ok, _ } = :cowboy.start_clear(:api,
+    #                                100,
+    #                               [port: 8080],
+    #                               %{ env: %{dispatch: dispatch_config}}
+    #                               )
     { :ok, _ } = :cowboy.start_tls(:api,
                                     100,
                                    [port: 8443,
-                                    keyfile: "/home/crunch/server.key",
-                                    certfile: "/home/crunch/server.crt"],
+                                    cacertfile: "priv/cowboy-ca.crt",
+                                    keyfile: "priv/server.key",
+                                    certfile: "priv/server.crt"
+                                   ],
                                    %{ env: %{dispatch: dispatch_config}}
                                    )
   end
